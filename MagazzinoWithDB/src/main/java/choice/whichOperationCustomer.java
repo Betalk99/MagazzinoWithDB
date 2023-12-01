@@ -66,11 +66,6 @@ public class whichOperationCustomer {
         }
     }
 
-    public static void stampStock(ArrayList<Product> cart){
-        for(Product i : cart){
-            System.out.println(i);
-        }
-    }
 
 
 }

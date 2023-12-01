@@ -27,15 +27,9 @@ public class cartManagement {
                 int operCarr = sc.nextInt();
                 switch (operCarr) {
                     case 1://controllo stato carrello
-                        ArrayList<Product> cart = UtilsCartDb.statusCart(idClient);
-                        if(cart.isEmpty()){
-                            System.out.println("Cart is Empty");
-                        }else{
-                            stampYourCart(UtilsCartDb.statusCart(idClient));
-                        }
+                        checkCartEmpty(idClient);
                         break;
                     case 2://aggiunta elementi da carrello tramite id
-//                        addId(arrayTemp, cart);
                         UtilsCartDb.addCartIdDb(idCart,idClient);
                         stampYourCart(UtilsCartDb.statusCart(idClient));
                         break;
@@ -52,7 +46,8 @@ public class cartManagement {
                     case 6:// checkout
                         break;
                     case 7:
-
+                        UtilsCartDb.getEmptyCart(idClient);
+                        checkCartEmpty(idClient);
                         break;
                     case 8:
 
@@ -89,7 +84,14 @@ public class cartManagement {
         System.out.println("\n");
     }
 
-
+    public static void checkCartEmpty(int idClient){
+        ArrayList<Product> cart = UtilsCartDb.statusCart(idClient);
+        if(cart.isEmpty()){
+            System.out.println("Cart is Empty");
+        }else{
+            stampYourCart(UtilsCartDb.statusCart(idClient));
+        }
+    }
 
 
 }

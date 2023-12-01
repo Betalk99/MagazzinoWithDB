@@ -35,7 +35,7 @@ public class UtilsCartDb {
         try {
             Scanner in = new Scanner(System.in);
             Statement stmt = DbManagement.makeConnection();
-            whichOperationCustomer.stampStock(UtilsChoice.stampaStockDb());
+            UtilsChoice.stampResult(UtilsChoice.stampaStockDb());
             System.out.println("Which device do you want to add from your cart? \\n Indicate the id : ");
 
             int idProd = in.nextInt();
@@ -82,6 +82,25 @@ public class UtilsCartDb {
             System.out.println(e.getMessage());
         }
         return somma;
+    }
+
+    public static void getEmptyCart(int idClient){
+        try{
+            Scanner in = new Scanner(System.in);
+            Statement stmt = DbManagement.makeConnection();
+            cartManagement.stampYourCart(statusCart(idClient));
+
+            System.out.println("Are you sure you're emptying your cart?   1) YES  2) NO");
+            int ans = in.nextInt();
+            if(ans == 1){
+                stmt.executeQuery("DELETE FROM cart AS c WHERE c.idClient = "+idClient+";");
+            }else{
+                System.out.println("You have chosen not to empty your cart");
+            }
+
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
     }
 
 }
