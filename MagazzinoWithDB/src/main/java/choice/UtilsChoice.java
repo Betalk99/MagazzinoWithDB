@@ -170,7 +170,7 @@ public class UtilsChoice {
         try {
             Statement stmt = DbManagement.makeConnection();
             String checkClientMail = "SELECT * FROM cart AS c\n" +
-                    "WHERE c.idClient = " + rescueIdClient(c) + ";";
+                    "WHERE c.idClient = " + rescueIdClient(c) + " AND c.status = 0;";
             ResultSet rs = stmt.executeQuery(checkClientMail);
 
             while (rs.next()) {
@@ -184,8 +184,6 @@ public class UtilsChoice {
                     idCart = (rs1.getInt("idCartMax") + 1);
                 }
             }
-
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

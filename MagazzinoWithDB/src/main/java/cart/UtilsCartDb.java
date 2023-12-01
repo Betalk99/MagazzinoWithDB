@@ -8,7 +8,11 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class UtilsCartDb {
@@ -19,7 +23,7 @@ public class UtilsCartDb {
             Statement stmt = DbManagement.makeConnection();
             String joinCartProd = "SELECT * FROM cart AS c\n" +
                     "JOIN product AS p ON c.idProduct = p.id\n" +
-                    "WHERE c.idClient = "+ idClient +";";
+                    "WHERE c.idClient = "+ idClient +" AND c.status = 0;";
             ResultSet rs = stmt.executeQuery(joinCartProd);
             while (rs.next()){
                 status.add(DbManagement.costructProd(rs));
@@ -102,5 +106,35 @@ public class UtilsCartDb {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void checkout(int idCart, int idClient){
+        try{
+            Scanner in = new Scanner(System.in);
+            Statement stmt = DbManagement.makeConnection();
+            cartManagement.stampYourCart(statusCart(idClient));
+
+            System.out.println("Are you sure you're checkout your cart?   1) YES  2) NO");
+            int ans = in.nextInt();
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            System.out.println(dateFormat.format(date));
+
+            if(ans == 1){
+                String checkout = "INSERT INTO orders (idCart, date)" +
+                        "VALUES ("+idCart+", '"+ dateFormat.format(date) +"' )";
+                stmt.execute(checkout);
+                stmt.executeUpdate("UPDATE cart AS c " +
+                        "SET c.status = 1 " +
+                        "WHERE c.idClient = "+ idClient +";");
+                System.out.println("You have completed your order");
+            }else{
+                System.out.println("You have chosen not to checkout your cart");
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
 
 }

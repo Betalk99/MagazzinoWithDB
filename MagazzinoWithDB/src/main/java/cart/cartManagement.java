@@ -44,6 +44,7 @@ public class cartManagement {
                     case 5://Aggiunta prodotti al carrello
                         break;
                     case 6:// checkout
+                        UtilsCartDb.checkout(idCart,idClient);
                         break;
                     case 7:
                         UtilsCartDb.getEmptyCart(idClient);
@@ -53,24 +54,24 @@ public class cartManagement {
 
                         break;
                 }
-
-            }
-            boolean stay2 = true;
-            while (stay2) {
-                System.out.println("If you'd like to perform other cart-related operations, type '1'.\nIf you wish to go back to the user's menu, type '2'.");
-                String selectOption = sc.nextLine();
-                if (Objects.equals(selectOption, "1")) {
-                    stay = true;
-                    stay2 = false;
-                } else if (Objects.equals(selectOption, "2")) {
-                    stay = false;
-                    stay2 = false;
-                } else {
-                    System.out.println("Invalid input.");
-                    stay = true;
-                    stay2 = true;
+                boolean stay2 = true;
+                while (stay2) {
+                    System.out.println("\nIf you'd like to perform other cart-related operations, type '1'.\nIf you wish to go back to the user's menu, type '2'.");
+                    int selectOption = sc.nextInt();
+                    if (selectOption == 1) {
+                        stay = true;
+                        stay2 = false;
+                    } else if (selectOption == 2) {
+                        stay = false;
+                        stay2 = false;
+                    } else {
+                        System.out.println("Invalid input.");
+                        stay = true;
+                        stay2 = true;
+                    }
                 }
             }
+
         } catch (InputMismatchException e) {
             System.out.println("Error: invalid input.");
         }
