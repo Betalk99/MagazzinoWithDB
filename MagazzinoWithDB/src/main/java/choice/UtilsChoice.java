@@ -174,11 +174,11 @@ public class UtilsChoice {
             ResultSet rs = stmt.executeQuery(checkClientMail);
 
             while (rs.next()) {
-                idCart = rs.getInt("idClient");
+                idCart = rs.getInt("idCart");
             }
 
             if (idCart == -1) {
-                String checkNewIdCart = "SELECT MAX(idClient) AS idCartMax FROM cart;";
+                String checkNewIdCart = "SELECT MAX(idCart) AS idCartMax FROM cart;";
                 ResultSet rs1 = stmt.executeQuery(checkNewIdCart);
                 while (rs1.next()) {
                     idCart = (rs1.getInt("idCartMax") + 1);

@@ -68,7 +68,7 @@ public class UtilsCartDb {
         }
     }
 
-    public static BigDecimal totalCostCart(int idClient){
+    public static BigDecimal totalCostCart(int idClient, int idCart){
         BigDecimal somma = null;
         try {
             Statement stmt = DbManagement.makeConnection();
@@ -76,7 +76,7 @@ public class UtilsCartDb {
 
             ResultSet rs = stmt.executeQuery("SELECT SUM(p.sellprice) AS sum FROM cart AS c\n" +
                     "JOIN product AS p ON c.idProduct = p.id\n" +
-                    "WHERE c.idClient = "+idClient+";");
+                    "WHERE c.idClient = "+idClient+" AND c.idCart = "+idCart+";");
             while(rs.next()){
                 somma = BigDecimal.valueOf(rs.getInt("sum"));
             }
@@ -114,6 +114,7 @@ public class UtilsCartDb {
             cartManagement.stampYourCart(statusCart(idClient));
 
             System.out.println("Are you sure you're checkout your cart?   1) YES  2) NO");
+            System.out.println("Total cost is: " + totalCostCart(idClient, idCart));
             int ans = in.nextInt();
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

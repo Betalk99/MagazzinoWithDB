@@ -8,6 +8,11 @@ import java.util.Objects;
 import java.util.Scanner;
 public class cartManagement {
     public static void operCar(int idClient, int idCart) {
+
+        System.out.println(" ID CARRRELLO : " + idCart);
+
+
+
         try {
             Scanner sc = new Scanner(System.in);
             boolean stay = true;
@@ -39,7 +44,7 @@ public class cartManagement {
                         break;
                     case 4:// costo totale
                         stampYourCart(UtilsCartDb.statusCart(idClient));
-                        System.out.println("Total Sell Price Cart: " + UtilsCartDb.totalCostCart(idClient));
+                        System.out.println("Total Sell Price Cart: " + UtilsCartDb.totalCostCart(idClient, idCart));
                         break;
                     case 5://Aggiunta prodotti al carrello
                         break;
