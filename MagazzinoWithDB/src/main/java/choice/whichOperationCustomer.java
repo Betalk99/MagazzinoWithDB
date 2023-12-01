@@ -2,7 +2,10 @@ package choice;
 
 import clients.*;
 import cart.*;
+import product.Product;
+
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -62,6 +65,14 @@ public class whichOperationCustomer {
             }
         }
     }
+
+    public static void stampStock(ArrayList<Product> cart){
+        for(Product i : cart){
+            System.out.println(i);
+        }
+    }
+
+
 }
 
 

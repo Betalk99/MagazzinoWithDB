@@ -1,5 +1,10 @@
 package cart;
 
+import product.Product;
+
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Scanner;
 public class cartManagement {
     public static void operCar(int idClient, int idCart) {
@@ -12,9 +17,9 @@ public class cartManagement {
                          1) Cart status\s
                          2) Add product/s to cart via ID\s
                          3) Remove product/s to cart via ID\s
-                         4) Proceed to checkout\s
+                         4) Get the total price of the items in the cart\s
                          5) Add products to your cart\s
-                         6) Get the total price of the items in the cart\s
+                         6) Proceed to checkout\s
                          7) Get empty cart
                          8) Get the average amount spent""");
 
@@ -22,32 +27,35 @@ public class cartManagement {
                 int operCarr = sc.nextInt();
                 switch (operCarr) {
                     case 1://controllo stato carrello
-                        if (stampCart(cart)) {
-                            System.out.println("The cart is empty");
-                        } else {
-                            System.out.println(cart);
+                        ArrayList<Product> cart = UtilsCartDb.statusCart(idClient);
+                        if(cart.isEmpty()){
+                            System.out.println("Cart is Empty");
+                        }else{
+                            stampYourCart(UtilsCartDb.statusCart(idClient));
                         }
                         break;
                     case 2://aggiunta elementi da carrello tramite id
 //                        addId(arrayTemp, cart);
+                        UtilsCartDb.addCartIdDb(idCart,idClient);
+                        stampYourCart(UtilsCartDb.statusCart(idClient));
                         break;
                     case 3://rimozione elementi da carrello tramite id
-                        insertRemoveId(cart, arrayTemp);
+                        UtilsCartDb.removeCartIdDB(idClient);
+                        stampYourCart(UtilsCartDb.statusCart(idClient));
                         break;
-                    case 4://Finalizza acquisti
-                        buyProducts(cart, stock, arrayTemp);
+                    case 4:// costo totale
+                        stampYourCart(UtilsCartDb.statusCart(idClient));
+                        System.out.println("Total Sell Price Cart: " + UtilsCartDb.totalCostCart(idClient));
                         break;
                     case 5://Aggiunta prodotti al carrello
-                        insertAddProdCart(cart, arrayTemp);
                         break;
-                    case 6://Prezzo totale dei prodotti nel carrello.
-                        cartTotal(cart);
+                    case 6:// checkout
                         break;
                     case 7:
-                        cart.getCart().clear();
+
                         break;
                     case 8:
-                        averageSpending(cart);
+
                         break;
                 }
 
@@ -73,7 +81,13 @@ public class cartManagement {
         }
     }
 
-
+    public static void stampYourCart(ArrayList<Product> cart){
+        System.out.println("Your Cart :  \n");
+        for(Product i : cart){
+            System.out.println(i);
+        }
+        System.out.println("\n");
+    }
 
 
 

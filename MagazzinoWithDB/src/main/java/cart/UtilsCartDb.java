@@ -1,9 +1,10 @@
 package cart;
 
-import choice.UtilsChoice;
-import database.DbManagement;
-import product.Product;
+import choice.*;
+import database.*;
+import product.*;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -34,7 +35,7 @@ public class UtilsCartDb {
         try {
             Scanner in = new Scanner(System.in);
             Statement stmt = DbManagement.makeConnection();
-            UtilsChoice.stampaStockDb();
+            whichOperationCustomer.stampStock(UtilsChoice.stampaStockDb());
             System.out.println("Which device do you want to add from your cart? \\n Indicate the id : ");
 
             int idProd = in.nextInt();
@@ -51,16 +52,36 @@ public class UtilsCartDb {
         try {
             Scanner in = new Scanner(System.in);
             Statement stmt = DbManagement.makeConnection();
-            cartManagement.stampYourCart(idClient);
+            cartManagement.stampYourCart(statusCart(idClient));
             System.out.println("Which device do you want to remove from your cart? \\n Indicate the id : ");
 
             int idProd = in.nextInt();
 
-            String addProductId = "DELETE FROM cart AS c WHERE c.id = "+ idProd +";";
-            stmt.execute(addProductId);
+            String removeProductId = "DELETE FROM cart AS c WHERE c.id = "+ idProd +";";
+            stmt.execute(removeProductId);
         }catch (SQLException e ){
             System.out.println(e.getMessage());
         }
+    }
+
+    public static BigDecimal totalCostCart(int idClient){
+        BigDecimal somma = null;
+        try {
+            Statement stmt = DbManagement.makeConnection();
+            cartManagement.stampYourCart(statusCart(idClient));
+
+            ResultSet rs = stmt.executeQuery("SELECT SUM(p.sellprice) AS sum FROM cart AS c\n" +
+                    "JOIN product AS p ON c.idProduct = p.id\n" +
+                    "WHERE c.idClient = "+idClient+";");
+            while(rs.next()){
+                somma = BigDecimal.valueOf(rs.getInt("sum"));
+            }
+
+
+        }catch (SQLException e ){
+            System.out.println(e.getMessage());
+        }
+        return somma;
     }
 
 }
