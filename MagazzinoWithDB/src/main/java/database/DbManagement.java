@@ -1,5 +1,6 @@
 package database;
 
+import order.Orders;
 import product.*;
 
 
@@ -19,5 +20,10 @@ public class DbManagement {
         Product t1 = new Product(ProductTypes.valueOf(rs.getString("type")), rs.getString("brand"), rs.getString("model"), rs.getString("description"), rs.getDouble("displaysize"), rs.getDouble("storagecap"), rs.getDouble("purchaseprice"), rs.getDouble("sellprice"), rs.getInt("id"));
 
         return t1;
+    }
+
+    public static Orders costructOrder(ResultSet rs) throws SQLException {
+        Orders ord = new Orders(rs.getInt("idCart"), rs.getString("date"));
+        return ord;
     }
 }

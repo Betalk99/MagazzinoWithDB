@@ -2,6 +2,7 @@ package cart;
 
 import choice.*;
 import database.*;
+import order.Orders;
 import product.*;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UtilsCartDb {
@@ -134,6 +136,53 @@ public class UtilsCartDb {
             }
         }catch (SQLException e){
             System.out.println(e.getMessage());
+        }
+    }
+
+    public static ArrayList<Product> myOrder(int idClient){
+        ArrayList<Product> choiceOrder = new ArrayList<>();
+        ArrayList<Orders> listOrder = new ArrayList<>();
+        try{
+            Scanner in = new Scanner(System.in);
+
+            Statement stmt = DbManagement.makeConnection();
+            String orderClient = "SELECT * FROM orders AS o\n" +
+                    "JOIN cart AS c ON o.idCart = c.idCart\n" +
+                    "WHERE c.idClient = "+ idClient +"; ";
+            ResultSet rs = stmt.executeQuery(orderClient);
+
+            while (rs.next()){
+                if(!(listOrder.contains(DbManagement.costructOrder(rs)))){
+                    listOrder.add(DbManagement.costructOrder(rs));
+                }
+            }
+
+            stampMyOrder(listOrder);
+
+            System.out.println("Which order do you want to display ? Indicate ID ");
+            int idOrder = in.nextInt();
+
+            String visualOrderQuery = "SELECT p.id, p.`type`, p.brand, p.model, p.description, p.displaysize, p.storagecap, p.purchaseprice, p.sellprice FROM orders AS o\n" +
+                    "JOIN cart AS c ON o.idCart = c.idCart\n" +
+                    "JOIN product AS p ON c.idProduct = p.id\n" +
+                    "WHERE c.idClient = " + idClient + " AND c.idCart = " + idOrder + ";";
+
+            ResultSet rs1 = stmt.executeQuery(visualOrderQuery);
+
+            while (rs1.next()){
+                choiceOrder.add(DbManagement.costructProd(rs1));
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }catch (InputMismatchException e){
+            System.out.println(e.getMessage());
+        }
+        return choiceOrder;
+    }
+
+    public static void stampMyOrder(ArrayList<Orders>  listOrder){
+        for(Orders i: listOrder){
+            System.out.println(i);
         }
     }
 

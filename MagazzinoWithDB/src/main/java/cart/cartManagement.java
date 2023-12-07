@@ -26,7 +26,7 @@ public class cartManagement {
                          5) Add products to your cart\s
                          6) Proceed to checkout\s
                          7) Get empty cart
-                         8) Get the average amount spent""");
+                         8) My orders""");
 
 
                 int operCarr = sc.nextInt();
@@ -56,7 +56,7 @@ public class cartManagement {
                         checkCartEmpty(idClient);
                         break;
                     case 8:
-
+                        stampYourCart(UtilsCartDb.myOrder(idClient));
                         break;
                 }
                 boolean stay2 = true;

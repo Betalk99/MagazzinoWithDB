@@ -24,7 +24,9 @@ public class UtilsChoice {
         ArrayList<Product> stock = new ArrayList<>();
         try{
             Statement stmt = DbManagement.makeConnection();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM product");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM stock AS s\n" +
+                    "JOIN product AS p ON s.idStock = p.id\n" +
+                    "WHERE s.qty >= 1");
 
             while(rs.next()){
                 stock.add(DbManagement.costructProd(rs));
@@ -62,15 +64,24 @@ public class UtilsChoice {
         int category = in.nextInt();
         switch (category) {
             case 1:
-                ResultSet rsn = stmt.executeQuery("SELECT * FROM product WHERE type = 'notebook';");
+                String queryNotebook = "SELECT * FROM stock AS s\n" +
+                        "JOIN product AS p ON s.idStock = p.id\n" +
+                        "WHERE p.type = 'notebook' AND s.qty >= 1;";
+                ResultSet rsn = stmt.executeQuery(queryNotebook);
                 next(byTypeArray, rsn);
                 break;
             case 2:
-                ResultSet rss = stmt.executeQuery("SELECT * FROM product WHERE type = 'smartphone';");
+                String querySmartphone = "SELECT * FROM stock AS s\n" +
+                        "JOIN product AS p ON s.idStock = p.id\n" +
+                        "WHERE p.type = 'smartphone' AND s.qty >= 1;";
+                ResultSet rss = stmt.executeQuery(querySmartphone);
                 next(byTypeArray, rss);
                 break;
             case 3:
-                ResultSet rst = stmt.executeQuery("SELECT * FROM product WHERE type = 'tablet';");
+                String queryTablet = "SELECT * FROM stock AS s\n" +
+                        "JOIN product AS p ON s.idStock = p.id\n" +
+                        "WHERE p.type = 'tablet' AND s.qty >= 1;";
+                ResultSet rst = stmt.executeQuery(queryTablet);
                 next(byTypeArray, rst);
                 break;
             default:
@@ -87,7 +98,10 @@ public class UtilsChoice {
             Statement stmt = DbManagement.makeConnection();
             System.out.println("Which brand do you want to look for?");
             String brand = in.next();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM product WHERE brand = '"+ brand +"';");
+            String queryBrand = "SELECT * FROM stock AS s\n" +
+                    "JOIN product AS p ON s.idStock = p.id\n" +
+                    "WHERE p.brand = '" + brand + "' AND s.qty >= 1;";
+            ResultSet rs = stmt.executeQuery(queryBrand);
 
             while (rs.next()){
                 prodByBrand.add(DbManagement.costructProd(rs));
@@ -106,7 +120,10 @@ public class UtilsChoice {
             Statement stmt = DbManagement.makeConnection();
             System.out.println("Which brand do you want to look for?");
             String model = in.nextLine();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM prodotti WHERE model = '"+ model +"';");
+            String queryModel = "SELECT * FROM stock AS s\n" +
+                    "JOIN product AS p ON s.idStock = p.id\n" +
+                    "WHERE p.model = '" + model + "' AND s.qty >= 1;";
+            ResultSet rs = stmt.executeQuery(queryModel);
 
             while (rs.next()) {
                 prodByModel.add(DbManagement.costructProd(rs));
@@ -131,7 +148,10 @@ public class UtilsChoice {
             range[1] = in.nextDouble();
             Arrays.sort(range);
 
-            String searchRange = "SELECT * FROM product WHERE product.sellprice > '" + range[0] +  "' AND product.sellprice <= '" + range[1] + "';";
+            String searchRange = "SELECT * FROM stock AS s\n" +
+                    "JOIN product AS p ON s.idStock = p.id\n" +
+                    "WHERE p.sellprice  >= " + range[0] + " AND p.sellprice <= " + range[1] + " AND s.qty >= 1;";
+
             ResultSet rs = stmt.executeQuery(searchRange);
 
             while (rs.next()){
